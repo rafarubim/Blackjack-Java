@@ -1,0 +1,57 @@
+/*
+ * Representa uma carta que já foi comprada do baralho. Possui variáveis que permitem
+ * uma carta ser jogada especificamente num jogo de blackjack.
+ */
+import java.util.List;
+
+public class CartaBlackjack {
+	private Carta carta;
+	private boolean faceVisivel;
+	
+	public CartaBlackjack(Carta carta, boolean faceVisivel) {
+		this.carta = carta;
+		this.faceVisivel = faceVisivel;
+	}
+	
+	public static int getPontos(List<CartaBlackjack> lstCartas) {
+		int ases = 0;
+		int pontos = 0;
+		for (CartaBlackjack cB: lstCartas) {
+			Carta c = cB.getCarta();
+			Carta.Valor val = c.getValor();
+			if (cB.getVisibilidade() == true) {
+				if (val == Carta.Valor.AS) {
+					ases++;
+				} else {
+					int id = val.getId();
+					if (id > 10) {
+						pontos += 10;
+					} else {
+						pontos += id;
+					}
+				}
+			}
+		}
+		if (ases > 0) {
+			pontos += ases - 1;
+			if (pontos <= 10) {
+				pontos += 11;
+			} else {
+				pontos += 1;
+			}
+		}
+		return pontos;
+	}
+	
+	public Carta getCarta() {
+		return carta;
+	}
+	
+	public void setVisibilidade(boolean faceVisivel) {
+		this.faceVisivel = faceVisivel;
+	}
+	
+	public boolean getVisibilidade() {
+		return faceVisivel;
+	}
+}

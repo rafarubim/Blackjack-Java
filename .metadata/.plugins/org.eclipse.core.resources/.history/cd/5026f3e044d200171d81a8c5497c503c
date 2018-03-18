@@ -1,0 +1,32 @@
+public class Banca extends Participante {
+	private static Banca banca = new Banca();
+	private Baralho deck = new Baralho();
+	
+	private Banca() {
+		deck.embaralhar();
+	}
+	
+	public static Banca getBanca() {
+		return banca;
+	}
+	
+	public Baralho getBaralho() {
+		return deck;
+	}
+	
+	@Override
+	public void addCartaMao(Carta c) {
+		boolean faceVisivel = true;
+		if (listaMao.isEmpty()) {
+			faceVisivel = false;
+		}
+		listaMao.add(new CartaBlackjack(c, faceVisivel));
+	}
+	
+	public void revelarCarta() {
+		if (listaMao.isEmpty()) {
+			throw new RuntimeException("Banca não possui carta a revelar");
+		}
+		listaMao.get(0).setVisibilidade(true);
+	}
+}

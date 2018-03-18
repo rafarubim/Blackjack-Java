@@ -1,0 +1,6 @@
+import java.util.List;
+
+public interface ControladorObservado {
+	public int getJogAtual();
+	public List<Jogador> getJogadores();
+}

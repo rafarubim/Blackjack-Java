@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>1421229-1511068</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>1421229-1511068.asta</name>
+			<type>1</type>
+			<location>F:/Rafael/Projetos/Eclipse/Trabalho POO/1421229-1511068/1421229-1511068.asta</location>
+		</link>
+		<link>
+			<name>Diagramas.pdf</name>
+			<type>1</type>
+			<location>F:/Rafael/Projetos/Eclipse/Trabalho POO/1421229-1511068/Diagramas.pdf</location>
+		</link>
+	</linkedResources>
+</projectDescription>

@@ -1,0 +1,34 @@
+public class Jogador extends Participante {
+	
+	public enum Status {
+		INDETERMINADO, VENCEU, PERDEU, EMPATOU
+	}
+	
+	private Status status = Status.INDETERMINADO;
+	private boolean acabou = false;
+	
+	public Jogador() {
+		
+	}
+	
+	public void setAcabou(boolean acabou) {
+		this.acabou = acabou;
+	}
+	
+	public boolean getAcabou() {
+		return acabou;
+	}
+	
+	public void setStatus(Status status) {
+		this.status = status;
+	}
+	
+	public Status getStatus() {
+		return status;
+	}
+	
+	@Override
+	public void addCartaMao(Carta c) {
+		listaMao.add(new CartaBlackjack(c, true));
+	}
+}

@@ -1,0 +1,133 @@
+public class Carta {
+	public enum Valor {
+		AS("A", 1), DOIS("2", 2), TRES("3", 3), QUATRO("4", 4), CINCO("5", 5), SEIS("6", 6),
+		SETE("7", 7), OITO("8", 8), NOVE("9", 9), DEZ("10", 10), VALETE("J", 11), DAMA("Q", 12), REI("K", 13);
+		
+		private final String simbolo;
+		private final int id;
+		
+		private Valor(String simb, int id) {
+			simbolo = simb;
+			this.id = id;
+		}
+		
+		@Override
+		public String toString() {
+			String str = super.toString();
+			switch(this) {
+			case AS:
+				str = "ÁS";
+				break;
+			case TRES:
+				str = "TRÊS";
+				break;
+			default:
+			}
+			return str.substring(0,1) + str.substring(1).toLowerCase();
+		}
+		
+		public static Valor getValor(String simbolo) {
+			for (Valor v: Valor.values()) {
+				if (v.simbolo == simbolo) {
+					return v;
+				}
+			}
+			throw new RuntimeException("Valor desconhecido");
+		}
+		
+		public static Valor getValor(int id) {
+			for (Valor v: values()) {
+				if (v.id == id) {
+					return v;
+				}
+			}
+			throw new RuntimeException("Valor desconhecido");
+		}
+		
+		public String getSimbolo() {
+			return simbolo;
+		}
+		
+		public int getId() {
+			return id;
+		}
+	}
+	
+	public enum Naipe {
+		PAUS(1), COPAS(2), ESPADAS(3), OUROS(4);
+		
+		private int id;
+		
+		private Naipe(int id) {
+			this.id = id;
+		}
+		
+		@Override public String toString() {
+			String str = super.toString();
+			return str.substring(0,1) + str.substring(1).toLowerCase();
+		}
+		
+		public static Naipe getNaipe(int id) {
+			for (Naipe n: values()) {
+				if (n.id == id) {
+					return n;
+				}
+			}
+			throw new RuntimeException("Valor desconhecido");
+		}
+		
+		public String getSimbolo() {
+			switch(this) {
+			case PAUS:
+				return "P";
+			case COPAS:
+				return "C";
+			case ESPADAS:
+				return "E";
+			case OUROS:
+				return "O";
+			default:
+				throw new RuntimeException("Naipe inexistente");
+			}
+		}
+	}
+	
+	private final Valor valor;
+	private final Naipe naipe;
+	
+	public Carta(Valor v, Naipe n) {
+		valor = v;
+		naipe = n;
+	}
+	
+	@Override
+	public String toString() {
+		return valor + " de " + naipe;
+	}
+	
+	@Override
+	public int hashCode() {
+		return getSimbolo().hashCode();
+	}
+	
+	@Override
+	public boolean equals(Object a) {
+		Carta b = (Carta) a;
+		if (b.valor == valor && b.naipe == naipe) {
+			return true;
+		}
+		return false;
+	}
+	
+	public String getSimbolo() {
+		return valor.getSimbolo() + naipe.getSimbolo();
+	}
+	
+	public Valor getValor() {
+		return valor;
+	}
+	
+	public Naipe getNaipe() {
+		return naipe;
+	}
+}

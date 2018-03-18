@@ -1,0 +1,267 @@
+import java.util.List;
+import java.util.ArrayList;
+
+public class ControladorJogo implements ControladorObservado {
+	private enum Evento {
+		NENHUM, ESCOLHA_NUM_JOG, ACAO_JOGADOR;
+	}
+	
+	public enum AcaoJogador {
+		PEDIR_CARTA, PARAR;
+	}
+	
+	private List<ObservadorControlador> lstObservadores = new ArrayList<>();
+		//Lista de observadores
+	private static ControladorJogo controladorJogo = new ControladorJogo();
+	private Evento eventoEsperado = Evento.NENHUM;
+	private List<Jogador> lstJogadores = new ArrayList<Jogador>();
+	private int numJogadorAtual = 0;
+
+	private ControladorJogo() {
+	}
+
+	public static ControladorJogo getControladorJogo() {
+		return controladorJogo;
+	}
+	
+	//Adiciona observadores na lista
+	public void addObservadorControlador (ObservadorControlador oC){
+		lstObservadores.add(oC);
+	}
+	
+	public void updateJogoCriado(){
+		for(ObservadorControlador oC : lstObservadores){
+			oC.notificarJogoCriado(this);
+		}
+	}
+	
+	public void updateBancaCriada(){
+		for(ObservadorControlador oC : lstObservadores){
+			oC.notificarBancaCriada(this);
+		}
+	}
+	
+	public void updateJogadoresCriados(){
+		for(ObservadorControlador oC : lstObservadores){
+			oC.notificarJogadoresCriados(this);
+		}
+	}
+	
+	public void updateJogAtual(){
+		for(ObservadorControlador oC : lstObservadores){
+			oC.notificarJogAtual(this);
+		}
+	}
+	
+	private void proximoJogador() {
+		numJogadorAtual += 1;
+		if (numJogadorAtual > lstJogadores.size()) {
+			numJogadorAtual -= lstJogadores.size();
+		}
+	}
+	
+	public void iniciarPartida() {
+		updateJogoCriado();
+		eventoEsperado = Evento.ESCOLHA_NUM_JOG;
+	}
+	
+	public void eventoNumJogadores(int numJog) {
+		if (eventoEsperado != Evento.ESCOLHA_NUM_JOG) {
+			return;
+		}
+		if (numJog < 1 || numJog > 4) {
+			throw new RuntimeException("Número de jogadores inválido");
+		}
+		
+		updateBancaCriada();
+		
+		// Criar jogadores
+		for (int i = 1; i <= numJog; i++) {
+			lstJogadores.add(new Jogador(i));
+		}
+		
+		updateJogadoresCriados();
+		
+		Banca banca = Banca.getBanca();
+		Baralho deck = banca.getBaralho();
+		
+		// Distribuir 2 cartas para cada jogador/banca
+		for (int i = 0; i < 2; i++) {
+			
+			for (int j = 0; j < lstJogadores.size(); j++) {
+				if (deck.isEmpty()) {
+					throw new RuntimeException("Baralho esvaziou em momento inesperado");
+				}
+				lstJogadores.get(j).addCartaMao(deck.comprarCarta());
+				
+				//TODO Notificar interface para mostrar nova carta
+			}
+			banca.addCartaMao(deck.comprarCarta());
+			//TODO Notificar interface para mostrar nova carta
+		}
+		
+		//XXX APAGA ISSO PELAMORDEDEUS
+//		imprimirMaos();
+		
+		//TODO RETIRAR ESSE CÓDIGO, SE AS REGRAS CONCORDAREM
+		// Ver se algum jogador tem mão de blackjack
+//		boolean maoBlackjack = false;
+//		for (int i = 0; i < lstJogadores.size(); i++) {
+//			if (lstJogadores.get(i).getPontos() == 21) {
+//				maoBlackjack = true;
+//				break;
+//			}
+//		}
+		
+//		if (maoBlackjack) {
+//			eventoEsperado = Evento.NENHUM;
+//			finalizarRodada(false);
+//		} else {
+			numJogadorAtual = 1;
+			//TODO Notificar interface de jogador atual
+			eventoEsperado = Evento.ACAO_JOGADOR;
+//		}	
+	}
+	
+	public void eventoAcaoJogador(int jogadorNum, AcaoJogador acao) {
+		if (eventoEsperado != Evento.ACAO_JOGADOR) {
+			return;
+		}
+		if (numJogadorAtual != jogadorNum) {
+			return;
+		}
+		Jogador jogador = lstJogadores.get(jogadorNum - 1);
+		boolean jogadorAcabou = false;
+		
+		switch(acao) {
+		case PEDIR_CARTA:
+			Banca banca = Banca.getBanca();
+			Baralho deck = banca.getBaralho();
+			if (deck.isEmpty()) {
+				throw new RuntimeException("Baralho esvaziou em momento inesperado");
+			}
+			jogador.addCartaMao(deck.comprarCarta());
+			//TODO Notificar interface para mostrar nova carta
+			int pontos = jogador.getPontos();
+			if (pontos > 21) {
+				jogador.setAcabou(true);
+				jogadorAcabou = true;
+			}
+			break;
+		case PARAR:
+			jogador.setAcabou(true);
+			jogadorAcabou = true;
+			break;
+		default:
+			throw new RuntimeException("Ação de jogador desconhecida");	
+		}
+		
+		// Testar se todos os jogadores acabaram
+		boolean todosAcabaram = true;
+		for (int i = 0; i < lstJogadores.size(); i++) {
+			if (lstJogadores.get(i).getAcabou() == false) {
+				todosAcabaram = false;
+				break;
+			}
+		}
+		if (todosAcabaram) {
+			eventoEsperado = Evento.NENHUM;
+			numJogadorAtual = 0;
+			//TODO Notificar interface de jogador atual nulo
+			updateJogAtual();
+			finalizarRodada(true);
+		} else if (jogadorAcabou) {
+			Jogador novoJogador;
+			int cont = 0;
+			do {
+				proximoJogador();
+				novoJogador = lstJogadores.get(numJogadorAtual - 1);
+				cont++;
+				if (cont > lstJogadores.size()) {
+					throw new RuntimeException("Inconsistencia: todos os jogadores já sairam da partida");
+				}
+			} while(novoJogador.getAcabou() == true);
+			//TODO Notificar interface de jogador atual
+			updateJogAtual();
+		}
+	}
+	
+	private void finalizarRodada(boolean bancaPodeComprar) {
+		Banca banca = Banca.getBanca();
+		banca.revelarCarta();
+		//TODO Notificar interface de carta revelada
+		if (bancaPodeComprar) {
+			comprarBanca();
+		}
+		//TODO MAO DE BLACKJACK GANHA DE MAO DE 21
+		int pontosBanca = banca.getPontos();
+		for (int i = 0; i < lstJogadores.size(); i++) {
+			Jogador jogador = lstJogadores.get(i);
+			int pontosJog = jogador.getPontos();
+			if ((pontosJog > pontosBanca && pontosJog <= 21 && pontosBanca <= 21) || (pontosJog <= 21 && pontosBanca > 21)) {
+				jogador.setStatus(Jogador.Status.VENCEU);
+			} else if (pontosJog == pontosBanca || (pontosJog > 21 && pontosBanca > 21)) {
+				jogador.setStatus(Jogador.Status.EMPATOU);
+			} else {
+				jogador.setStatus(Jogador.Status.PERDEU);
+			}
+		}
+		//TODO Notificar interface de jogador vencedor
+	}
+	
+	private void comprarBanca() {
+		Banca banca = Banca.getBanca();
+		while (banca.getPontos() < 17) {
+			Baralho deck = banca.getBaralho();
+			if (deck.isEmpty()) {
+				throw new RuntimeException("Baralho esvaziou em momento inesperado");
+			}
+			banca.addCartaMao(deck.comprarCarta());
+			//TODO Notificar interface de nova carta da banca
+		}
+	}
+	
+	@Override
+	public int getJogAtual() {
+		return numJogadorAtual;
+	}
+
+	@Override
+	public List<Jogador> getJogadores() {
+		return lstJogadores;
+	}
+	
+	public static void main(String[] args) {
+		ControladorJogo controlador = ControladorJogo.getControladorJogo();
+		controlador.addObservadorControlador(ContrInterface.getContrInterface());
+		controlador.iniciarPartida();
+		//TODO APAGAR OS TESTE
+//		ControladorJogo controlador = ControladorJogo.getControladorJogo();
+//		@SuppressWarnings("resource")
+//		Scanner scan = new Scanner(System.in);
+//		System.out.println("Quantos jogadores?");
+//		int qtd = scan.nextInt();
+//		scan.nextLine();
+//		controlador.eventoNumJogadores(qtd);
+//		int jogadorNum = 1;
+//		while(true) {
+//			System.out.println("Acao do jogador "+jogadorNum+": (pedir(1)/parar(2)):");
+//			int res = scan.nextInt();
+//			switch (res) {
+//			case 1:
+//				controlador.eventoAcaoJogador(jogadorNum, AcaoJogador.PEDIR_CARTA);
+//				break;
+//			case 2:
+//				controlador.eventoAcaoJogador(jogadorNum, AcaoJogador.PARAR);
+//				break;
+//			}
+//			controlador.imprimirMaos();
+//			jogadorNum += 1;
+//			if (jogadorNum > qtd) {
+//				jogadorNum -= qtd;
+//			}
+//		}
+	}
+
+	
+}

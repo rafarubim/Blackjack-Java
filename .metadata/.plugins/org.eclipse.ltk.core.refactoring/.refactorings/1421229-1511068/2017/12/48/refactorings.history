@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename type &apos;blackjack.engine.ListaJogadores&apos; to &apos;JogadoresPartida&apos;&#x0D;&#x0A;- Original project: &apos;BlackJack&apos;&#x0D;&#x0A;- Original element: &apos;blackjack.engine.ListaJogadores&apos;&#x0D;&#x0A;- Renamed element: &apos;blackjack.engine.JogadoresPartida&apos;&#x0D;&#x0A;- Update references to refactored element&#x0D;&#x0A;- Update textual occurrences in comments and strings" description="Rename type &apos;ListaJogadores&apos;" flags="589830" id="org.eclipse.jdt.ui.rename.type" input="/src&lt;blackjack.engine{ListaJogadores.java[ListaJogadores" matchStrategy="1" name="JogadoresPartida" qualified="false" references="true" similarDeclarations="false" stamp="1512169532235" textual="false" version="1.0"/>
+</session>

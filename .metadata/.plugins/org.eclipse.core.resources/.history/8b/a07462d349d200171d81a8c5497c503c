@@ -1,0 +1,142 @@
+import javax.swing.*;
+import java.awt.*;
+import java.util.List;
+
+public class ContrInterface implements ObservadorControlador {
+   
+    private static ContrInterface contrInterface = new ContrInterface();
+   
+    private JFrame menuFrame = null;
+    private int scrWidth;
+    private int scrHeight;
+    private float proporcaoJog = 2.f;
+   
+    private ContrInterface(){
+        Toolkit tk = Toolkit.getDefaultToolkit();
+        Dimension d = tk.getScreenSize();
+        scrWidth = d.width;
+        scrHeight = d.height;
+    }
+   
+    public static ContrInterface getContrInterface(){
+        return contrInterface;
+    }
+    
+    @Override
+    public void notificarJogoCriado(ControladorObservado cO) {
+        Imagem i = new Imagem("Imagens\\blackjackBKG.png");
+        menuFrame = new JFrame("Menu Inicial");
+        JPanel p = new Painel(i);
+        JButton b;
+        
+        p.setBackground(Color.WHITE);
+        menuFrame.getContentPane().add(p);
+        menuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+        int bckWidth = i.getImagem().getWidth(null);
+        int bckHeight = i.getImagem().getHeight(null);
+        int posX = scrWidth/2 - bckWidth/2;
+        int posY = scrHeight/2 - bckHeight/2;
+        menuFrame.setBounds(posX, posY, bckWidth, bckHeight);
+        
+        for (int j = 0; j < 4; j++) {
+                //Cria e adiciona 4 JButtons ao painel p
+            b = new JButton(String.valueOf(j + 1));
+            b.setActionCommand(String.valueOf(j + 1));
+            b.addActionListener(new NumJogadoresListener());
+                // Handler para obter o numero de jogadores
+            b.addActionListener(new MenuListener());
+            	// Handler para fechar janela menu
+            b.setBounds((bckWidth/2)+(j-2)*80, bckHeight-100, 50, 40);
+            p.add(b);
+        }
+        
+        menuFrame.setVisible(true);
+        menuFrame.repaint();
+    }
+    
+    public void fecharMenu() {
+    	if (menuFrame != null) {
+    		menuFrame.dispose();
+    	}
+    }
+    
+    //XXX Perguntar depois Ivan pra verficar este parametro
+    @Override
+    public void notificarBancaCriada(ControladorObservado cO) {
+        Imagem i = new Imagem("Imagens\\blackjackBKG.png");
+        JFrame bancaFrame = new JFrame("Banca");
+        PainelBanca bancaPainel = new PainelBanca(i);
+        JButton b = new JButton("Encerrar Partida");
+        bancaPainel.setBackground(Color.WHITE);
+        bancaFrame.getContentPane().add(bancaPainel);
+        bancaPainel.add(b);
+        b.addActionListener(new BancaListener());
+        bancaFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+       
+        int bckWidth = i.getImagem().getWidth(null);
+        int bckHeight = i.getImagem().getHeight(null);
+        int posX = scrWidth/2 - bckWidth/2;
+        int posY = scrHeight/2 - bckHeight/2;
+        bancaFrame.setBounds(posX, posY, bckWidth, bckHeight);
+       
+        bancaFrame.setVisible(true);
+        Banca.getBanca().addObservadorParticipante(bancaPainel);
+    }
+   
+    private PainelJogador criarJanelaJogador(String s, int numJog){
+        Imagem i = new Imagem("Imagens\\blackjack.png");
+        JFrame f = new JFrame(s);
+        PainelJogador p = new PainelJogador(i);
+        JButton b = new JButton("Pedir Carta");
+        JButton b2 = new JButton("Parar");
+        p.setBackground(Color.WHITE);       
+        f.getContentPane().add(p);
+        p.add(b);
+        p.add(b2);
+        b.setActionCommand(String.valueOf(numJog));
+        b.addActionListener(new PedirListener());
+        b.setBounds(10, 10, 160, 40);
+        
+        b2.setActionCommand(String.valueOf(numJog));
+        b2.addActionListener(new PararListener());
+        b2.setBounds(10, 60, 160, 40);
+        
+        int bckWidth = i.getImagem().getWidth(null);
+        int bckHeight = i.getImagem().getHeight(null);
+        int posXBanca = scrWidth/2 - bckWidth/2;
+        int posYBanca = scrHeight/2 - bckHeight/2;
+        int fWidth = (int) (bckWidth / proporcaoJog);
+        int fHeight = (int) (bckHeight / proporcaoJog);
+        int posX = 0, posY = 0;
+       
+        if (numJog == 1 || numJog == 2) {
+            posY = posYBanca;
+        } else if (numJog == 3 || numJog == 4){
+            posY =  posYBanca + (int) ((proporcaoJog - 1.)*fHeight);
+        }
+        if (numJog == 1 || numJog == 3) {
+            posX = posXBanca - fWidth;
+        } else if (numJog == 2 || numJog == 4) {
+            posX = posXBanca + (int) (proporcaoJog*fWidth);
+        }
+        f.setBounds(posX, posY, fWidth, fHeight);
+       
+        f.setVisible(true);
+        return p;
+    }   
+    
+    @Override
+    public void notificarJogadoresCriados(ControladorObservado cO){
+    	List<Jogador> lstJog = cO.getJogadores();
+    	for (int j = 0; j < lstJog.size(); j++){
+    		PainelJogador pJ = criarJanelaJogador("Jogador "+(j+1), j+1);
+    		lstJog.get(j).addObservadorJogador(pJ);
+    	}
+    }
+    
+    @Override
+	public void notificarJogAtual(ControladorObservado cO){
+		//TODO Implementar
+	}
+}

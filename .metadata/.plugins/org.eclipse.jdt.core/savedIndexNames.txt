@@ -1,0 +1,20 @@
+INDEX VERSION 1.127+F:\Rafael\Projetos\Eclipse\Trabalho POO\.metadata\.plugins\org.eclipse.jdt.core
+2337065394.index
+787175220.index
+43528011.index
+2563024201.index
+1462490794.index
+2978083896.index
+4124515303.index
+1421524939.index
+953302508.index
+1298343269.index
+1687554398.index
+3888803893.index
+3997887377.index
+1538169031.index
+514083360.index
+3888560065.index
+1664983513.index
+4239654316.index
+2126391181.index

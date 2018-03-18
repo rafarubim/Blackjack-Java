@@ -1,0 +1,9 @@
+import java.awt.event.*;
+
+public class NumJogadoresListener implements ActionListener {
+    public void actionPerformed(ActionEvent ae) {
+        String ac = ae.getActionCommand();
+        int numJogadores = Integer.valueOf(ac);
+        ControladorJogo.getControladorJogo().eventoNumJogadores(numJogadores);
+    }
+}

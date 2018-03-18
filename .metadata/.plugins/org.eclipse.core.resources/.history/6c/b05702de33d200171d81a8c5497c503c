@@ -1,0 +1,7 @@
+import java.awt.event.*;
+
+public class BancaListener implements ActionListener {
+    public void actionPerformed(ActionEvent ae) {
+        System.exit(0);
+    }   
+}

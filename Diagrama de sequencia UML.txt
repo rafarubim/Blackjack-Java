@@ -1,0 +1,22 @@
+Eventos síncronos (segue fluxo de execução):
+
+Jogo começa				> Criar menu
+Qtd jogadores			< Botão clicado (1,2,3,4)
+Banca criada			> Criar janela banca
+Jogadores criados		> Criar janelas (uma vez p/ cada janela?)
+Distribuir cartas		> Desenhar cartas (uma vez p/ cada carta) (p/ cima ou p/ baixo)
+Jogador atual definido	> Imprimir jogador atual ou bloquear botões dos outros
+Ação de jogador			< Botão clicado (Pedir, Parar)
+Jogador pediu			> Desenhar nova carta
+Vez de outro jogador	> Imprimir jogador atual ou bloquear botões dos outros
+Todos Jogs Acabaram		> Imprimir jogador atual nulo ou bloquear botões de todos
+Todos Jogs Acabaram		> Imprimir carta da banca revelada
+Banca compra cartas		> Desenhar cartas (uma vez p/ cada carta)
+Fim da partida			> Imprimir vencedor
+Fim da partida			> Apagar cartas jogadores
+
+Eventos assíncronos (interrupções):
+
+Retirar jogador do jogo	< Jogador fecha janela
+Salvamento efetuado 	> Criar arquivo de save (não é interface é sistema)
+Encerrar jogo			> Fechar Janelas

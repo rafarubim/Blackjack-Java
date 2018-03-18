@@ -1,0 +1,40 @@
+import java.util.ArrayList;
+import java.util.List;
+
+public abstract class Participante implements ParticipanteObservado {
+    protected List<CartaBlackjack> listaMao = new ArrayList<CartaBlackjack>();
+    private List<ObservadorParticipante> lstObservadoresP = new ArrayList<ObservadorParticipante>();
+   
+    public int getPontos() {
+        return CartaBlackjack.getPontos(listaMao);
+    }
+   
+    public void addObservadorParticipante(ObservadorParticipante oP) {
+        lstObservadoresP.add(oP);
+    }
+   
+    public void updateMao() {
+        for (ObservadorParticipante oP: lstObservadoresP) {
+            oP.notificarMao(this);
+        }
+    }
+   
+    @Override
+    public List<CartaBlackjack> getMao() {
+        return listaMao;
+    }
+   
+    public abstract void addCartaMao(Carta c);
+   
+    //XXX TA TUDO CERTO MAS APAGA
+//    public void imprimirMao() {
+//        for(CartaBlackjack cB: listaMao) {
+//            Carta c = cB.getCarta();
+//            System.out.print(c.getSimbolo()+", ");
+//        }
+//    }
+   
+    public void esvaziarMao() {
+        listaMao.clear();
+    }
+}

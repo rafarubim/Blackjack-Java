@@ -1,0 +1,28 @@
+import java.util.List;
+import java.awt.Image;
+import java.util.ArrayList;
+
+@SuppressWarnings("serial")
+public abstract class PainelParticipante extends Painel implements ObservadorParticipante {
+	List<Image> lstImgsCartas = new ArrayList<Image>();
+	
+	public PainelParticipante() {}
+	public PainelParticipante(List<Imagem> lstImgs) {
+		super(lstImgs);
+	}
+	
+	@Override
+	public void updateMao(ParticipanteObservado pO) {
+		List<CartaBlackjack> lstCartasB = pO.getMao();
+		lstImgsCartas.clear();
+		for (int i = 0; i < lstCartasB.size(); i++) {
+			CartaBlackjack cB = lstCartasB.get(i);
+			Carta chave = null;
+			if (cB.getVisibilidade() == true) {
+				chave = cB.getCarta();
+			}
+			Image image = LoadCartas.getLoadCartas().getImagem(chave);
+			lstImgsCartas.add(image);
+		}
+	}
+}

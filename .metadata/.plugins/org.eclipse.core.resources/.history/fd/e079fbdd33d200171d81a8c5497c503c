@@ -1,0 +1,24 @@
+import java.util.ArrayList;
+import java.util.List;
+
+public abstract class Participante {
+	protected List<CartaBlackjack> listaMao = new ArrayList<CartaBlackjack>();
+	
+	public int getPontos() {
+		return CartaBlackjack.getPontos(listaMao);
+	}
+	
+	public abstract void addCartaMao(Carta c);
+	
+	//XXX TA TUDO CERTO MAS APAGA
+//	public void imprimirMao() {
+//		for(CartaBlackjack cB: listaMao) {
+//			Carta c = cB.getCarta();
+//			System.out.print(c.getSimbolo()+", ");
+//		}
+//	}
+	
+	public void esvaziarMao() {
+		listaMao.clear();
+	}
+}

@@ -1,0 +1,5 @@
+
+public interface JogadorObservado extends ParticipanteObservado {
+	public int getNumJogador();
+	public Jogador.Status getStatus();
+}

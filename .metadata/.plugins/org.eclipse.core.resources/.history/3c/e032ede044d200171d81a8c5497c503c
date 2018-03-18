@@ -1,0 +1,4 @@
+
+public interface ObservadorJogador extends ObservadorParticipante {
+	public void updateStatus(JogadorObservado cO);
+}

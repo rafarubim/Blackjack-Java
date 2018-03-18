@@ -1,0 +1,7 @@
+
+public interface ObservadorControlador {
+	public void updateJogoCriado(ControladorObservado cO);
+	public void updateBancaCriada(ControladorObservado cO);
+	public void updateJogadoresCriados(ControladorObservado cO);
+	public void updateJogAtual(ControladorObservado cO);
+}

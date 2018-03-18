@@ -1,0 +1,34 @@
+//import java.awt.event.*;
+//import java.awt.*;
+//import javax.swing.JButton;
+//import javax.swing.JFrame;
+//
+////TODO adicionar a contagem de pontos
+//
+//public class JogadorListener implements ActionListener {
+//    private static int[] pos = new int[]{0,0,0,0}	;
+//    
+//    public void actionPerformed(ActionEvent ae) {
+//        if (! Banca.getBanca().getBaralho().isEmpty()) {
+//            Carta c = Banca.getBanca().getBaralho().comprarCarta();
+//            Image i = LoadCartas.getLoadCartas().getImagem(c);
+//            Painel p = (Painel) ((JButton) ae.getSource()).getParent();
+//            	//Pega o painel que contém o botão que foi clicado
+//            JFrame f = (JFrame) p.getTopLevelAncestor();
+//            
+//            //TODO OBS! (Apagar comentario)
+//            //Um unico int (pos) pra posicao das cartas pra todas as janelas tava dando problema, entao usei um 
+//            //vetor de int pegando o ultimo caracter do nome do frame pra indicar a posicao de cada janela no vetor...
+//            //Mas acho que a gente vai precisar adaptar ou alterar isso, adicionando-as em um outro JPanel, só pras cartas, 
+//            //pra poder apaga-las no final de cada turno e redesenhar outras
+//            System.out.println(f.getName());
+//            
+//            String s = f.getName();
+//            int indiceJog = Integer.parseInt(s.substring(s.lastIndexOf('e') + 1));
+//            VetorImagens vi = p.getVetorImagens();
+//            vi.novaImagem(i, pos[indiceJog], 100);
+//            pos[indiceJog] += 20;
+//            p.repaint();
+//        }
+//    }
+//}

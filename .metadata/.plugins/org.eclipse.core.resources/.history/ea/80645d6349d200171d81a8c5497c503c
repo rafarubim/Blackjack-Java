@@ -1,0 +1,8 @@
+
+public interface ObservadorControlador {
+	public void notificarJogoCriado(ControladorObservado cO);
+	public void notificarBancaCriada(ControladorObservado cO);
+	public void notificarJogadoresCriados(ControladorObservado cO);
+	public void notificarJogAtual(ControladorObservado cO);
+	public void notificarJogVenceu();
+}

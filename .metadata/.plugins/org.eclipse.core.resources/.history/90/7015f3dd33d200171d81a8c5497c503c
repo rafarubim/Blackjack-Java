@@ -1,0 +1,58 @@
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Random;
+
+public class Baralho {
+	private List<Carta> lstCartas = new ArrayList<Carta>();
+		/* A primeira carta da lista é a primeira com face para cima (fundo do baralho).
+		 * a última carta da lista é a primeira com a face para baixo (topo do baralho).
+		 * Ao comprar uma carta, se compra a primeira com face para baixo (do topo). */
+	
+	private List<Carta> cartasCompradas = new ArrayList<Carta>();
+	
+	public Baralho() {
+		for (int naipe = 1; naipe <= 4; naipe++) {
+			for (int val = 1; val <= 13; val++) {
+				Carta c;
+				c = new Carta(Carta.Valor.getValor(val), Carta.Naipe.getNaipe(naipe));
+				lstCartas.add(c);
+			}
+		}
+	}
+	
+	public void embaralhar() {
+		Random gerador = new Random();
+		List<Carta> aux = new ArrayList<Carta>();
+		while(! lstCartas.isEmpty()) {
+			int inx = gerador.nextInt(lstCartas.size());
+			aux.add(lstCartas.remove(inx));
+		}
+		lstCartas = aux;
+	}
+	
+	public Carta comprarCarta() {
+		if (lstCartas.isEmpty()) {
+			throw new RuntimeException("O baralho está vazio");
+		}
+		Carta c = lstCartas.remove(lstCartas.size() - 1);
+		cartasCompradas.add(c);
+		return c;
+	}
+	
+	public void reembaralharCartas() {
+		while(! cartasCompradas.isEmpty()) {
+			lstCartas.add(cartasCompradas.remove(0));
+		}
+		embaralhar();
+	}
+	
+	public boolean isEmpty() {
+		return lstCartas.isEmpty();
+	}
+	
+	public void imprimirCartas() {
+		for (Carta c: lstCartas) {
+			System.out.print(c.getSimbolo() + ", ");
+		}
+	}
+}

@@ -1,0 +1,4 @@
+
+public interface ObservadorParticipante {
+	public void updateMao(ParticipanteObservado p);
+}

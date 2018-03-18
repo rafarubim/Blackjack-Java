@@ -1,0 +1,5 @@
+import java.util.List;
+
+public interface ParticipanteObservado {
+	public List<CartaBlackjack> getMao();
+}

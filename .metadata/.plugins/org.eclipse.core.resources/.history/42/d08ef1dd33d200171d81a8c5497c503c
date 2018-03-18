@@ -1,0 +1,43 @@
+import java.awt.*;
+import java.io.*;
+import javax.imageio.*;
+import java.util.HashMap;
+import java.util.Map;
+
+// Esta classe não pode ser instanciada
+public class LoadCartas {
+	private static LoadCartas loadCartas = new LoadCartas();
+	private Map<Carta, Image> imgCartas = new HashMap<Carta, Image>();
+	
+	private LoadCartas() {
+		Baralho deck = new Baralho();
+		while (! deck.isEmpty()) {
+			loadCarta(deck.comprarCarta());
+		}
+		try {
+			Image i = ImageIO.read(new File("Imagens\\deck2.gif"));
+			imgCartas.put(null, i);
+		}
+		catch (IOException e) {
+			throw new RuntimeException("Falha em abertura de imagem");
+		}
+	}
+	
+	public static LoadCartas getLoadCartas() {
+		return loadCartas;
+	}
+	
+	private void loadCarta(Carta c) {
+		try {
+			Image i = ImageIO.read(new File("Imagens\\"+c.getSimbolo()+".gif"));
+			imgCartas.put(c, i);
+		}
+		catch (IOException e) {
+			throw new RuntimeException("Falha em abertura de imagem");
+		}
+	}
+	
+	public Image getImagem(Carta c) {
+		return imgCartas.get(c);
+	}
+}

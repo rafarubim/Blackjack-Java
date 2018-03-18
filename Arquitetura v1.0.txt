@@ -1,0 +1,52 @@
+*package* INTERFACE:
+
+CONTR_INTERFACE
+
+criarJanelaMenu();
+
+criarJanelaBanca();
+
+criarJanelaJogador();
+
+JANELA
+
+PAINEL
+
+IMAGEM
+
+LAYOUT
+
+*package* DEFAULT:
+
+MAIN
+
+criarJanelaMenu();
+
+criarJanelaBanca();
+
+criarJanelaJogador();
+
+BARALHO
+
+criarBaralho();
+
+embaralhar();
+
+comprarCarta();
+
+CARTA
+
+Enum Valor;
+Enum Naipe;
+
+criarCarta(Valor v, Naipe p);
+
+getValor();
+
+getNaipe();
+
+BANCA
+
+static baralho
+
+static getBaralho();
